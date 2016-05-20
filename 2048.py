@@ -15,7 +15,7 @@ numbers = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
 
 status=1 #status variable tracks if moving or addition actions were successfully made after a new number was added
 
-def move_left(x):
+def move_left(x): #modified bubble sorting algorithm that moves all the zeros to the right place
     global numbers
     global status
     global valid_move
@@ -36,7 +36,7 @@ def move_left(x):
                     valid_move=valid_move+1
         passnum = passnum-1
 
-def move_up(y):
+def move_up(y): #modified bubble sorting algorithm that moves all the zeros to the right place
     global numbers
     global status
     global valid_move
@@ -57,7 +57,7 @@ def move_up(y):
                     valid_move=valid_move+1
         passnum = passnum-1
 
-def move_right(x):
+def move_right(x): #modified bubble sorting algorithm that moves all the zeros to the right place
     global numbers
     global status
     global valid_move
@@ -78,7 +78,7 @@ def move_right(x):
                     valid_move=valid_move+1
         passnum = passnum-1
 
-def move_down(y):
+def move_down(y): #modified bubble sorting algorithm that moves all the zeros to the right place
     global numbers
     global status
     global valid_move
