@@ -9,8 +9,11 @@ win.border(0)
 win.nodelay(1)
 import random
 
-status=1
-highest=0
+numbers = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+#following line makes testing easier for game over: comment out the numbers list filled with zeros and use the following numbers variable instead.
+# numbers = [[1,3,5,7],[9,11,13,15],[17,19,21,23],[25,0,0,0]]
+
+status=1 #status variable tracks if moving or addition actions were successfully made after a new number was added
 
 def move_left(x):
     global numbers
@@ -209,10 +212,8 @@ def add_new_number():
         if status==2:
             win.addstr(10,5,"Try other direction")
 
-# numbers = [[1,2,0,4],[5,6,7,8],[0,22,333,4444],[1111,2222,3333,4444]]
-numbers = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
-
 add_new_number()
+win.addstr(10,5,"Press ESC to quit")
 while True:
 
     ch = win.getch()
