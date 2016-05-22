@@ -3,7 +3,9 @@ from curses import KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN
 screen = curses.initscr()
 curses.noecho()
 curses.curs_set(0)
-win = curses.newwin(curses.LINES, curses.COLS, 0, 0)
+win = curses.newwin(12, 22, 0, 0)
+# win = curses.newwin(curses.LINES, curses.COLS, 0, 0)
+
 win.keypad(1)
 win.border(0)
 win.nodelay(1)
@@ -11,7 +13,7 @@ import random
 
 numbers = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
 #following line makes testing easier for game over: comment out the numbers list filled with zeros and use the following numbers variable instead.
-# numbers = [[1,3,5,7],[9,11,13,15],[17,19,21,23],[25,0,0,0]]
+# numbers = [[1,3,5,7],[9,11,13,15],[17,0,0,0],[2501,1337,1234,5678]]
 
 status=1 #status variable tracks if moving or addition actions were successfully made after a new number was added
 
@@ -206,25 +208,25 @@ def add_new_number():
         status=0
         valid_move=0
         highest=max(numbers)
-        win.addstr(10,5,"                   ")
+        win.addstr(10,1,"                   ")
 
 
     elif status==1:
         add_new_number()
-        win.addstr(10,5,"                   ")
+        win.addstr(10,1,"                   ")
     else:
         status=2
         if status==2:
-            win.addstr(10,5,"Try other direction")
+            win.addstr(10,1,"Try other direction")
 
 add_new_number()
-win.addstr(10,5,"Press ESC to quit")
+win.addstr(10,1,"Press ESC to quit")
 while True:
 
     ch = win.getch()
     for y in range(4):
         for x in range(4):
-            win.addstr(1+y*2,1+x*5,"    ")
+            win.addstr(1+y*2,1+x*5,"     ")
             win.addstr(1+y*2,1+x*5,str(numbers[y][x]))
 
     if ch == curses.KEY_LEFT:
@@ -240,8 +242,8 @@ while True:
         key_down_pressed()
 
     if valid_move==4:
-        win.addstr(10,5,"                   ")
-        win.addstr(10,5,"Game over!")
+        win.addstr(10,1,"                   ")
+        win.addstr(10,1,"Game over!")
 
     if ch == 27:
         break
