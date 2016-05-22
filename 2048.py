@@ -99,7 +99,7 @@ def move_down(y): #modified bubble sorting algorithm that moves all the zeros to
                     valid_move=valid_move+1
         passnum = passnum-1
 
-def add_left(x):
+def add_left(x): #if two numbers are of the same value next to each other in the plane of the pressed key, this function multiplies one of them by 2 and makes the other number a zero.
     global numbers
     global status
     global valid_move
@@ -113,7 +113,7 @@ def add_left(x):
             if valid_move==0:
                 valid_move=valid_move+1
 
-def add_up(y):
+def add_up(y): #if two numbers are of the same value next to each other in the plane of the pressed key, this function multiplies one of them by 2 and makes the other number a zero.
     global numbers
     global status
     global valid_move
@@ -127,11 +127,11 @@ def add_up(y):
             if valid_move==1:
                 valid_move=valid_move+1
 
-def add_right(x):
+def add_right(x): #if two numbers are of the same value next to each other in the plane of the pressed key, this function multiplies one of them by 2 and makes the other number a zero.
     global numbers
     global status
     global valid_move
-    for i in range(3):
+    for i in reversed(range(3)):
         if numbers[x][i]==numbers[x][i+1] and numbers[x][i+1]!=0:
             numbers[x][i]=numbers[x][i]*2
             numbers[x][i+1]=0
@@ -141,11 +141,11 @@ def add_right(x):
             if valid_move==2:
                 valid_move=valid_move+1
 
-def add_down(y):
+def add_down(y): #if two numbers are of the same value next to each other in the plane of the pressed key, this function multiplies one of them by 2 and makes the other number a zero.
     global numbers
     global status
     global valid_move
-    for i in range(3):
+    for i in reversed(range(3)):
         if numbers[i][y]==numbers[i+1][y] and numbers[i][y]!=0:
             numbers[i][y]=numbers[i][y]*2
             numbers[i+1][y]=0
@@ -156,7 +156,7 @@ def add_down(y):
                 valid_move=valid_move+1
 
 
-def key_left_pressed():
+def key_left_pressed(): #what happens when the given key is pressed
     global status
     for x in range(4):
         move_left(x)
@@ -164,7 +164,7 @@ def key_left_pressed():
         move_left(x)
     add_new_number()
 
-def key_right_pressed():
+def key_right_pressed(): #what happens when the given key is pressed
     global status
     for x in range(4):
         move_right(x)
@@ -172,7 +172,7 @@ def key_right_pressed():
         move_right(x)
     add_new_number()
 
-def key_up_pressed():
+def key_up_pressed(): #what happens when the given key is pressed
     global status
     for y in range(4):
         move_up(y)
@@ -180,7 +180,7 @@ def key_up_pressed():
         move_up(y)
     add_new_number()
 
-def key_down_pressed():
+def key_down_pressed(): #what happens when the given key is pressed
     global status
     for y in range(4):
         move_down(y)
@@ -194,15 +194,20 @@ def add_new_number():
     global status
     global highest
     global valid_move
-    y=random.randrange(4)
-    x=random.randrange(4)
+    y=random.randrange(4) #- These two generate a random coordinate for the new numebr to be added.
+    x=random.randrange(4) #/
 
     if numbers[y][x] == 0 and status==1:
-        numbers[y][x] = 2
+        two_or_four = random.randrange(10)
+        if two_or_four !=1:
+            numbers[y][x] = 2
+        else:
+            numbers[y][x] = 4 #with a 10% chance of adding a 4
         status=0
         valid_move=0
         highest=max(numbers)
         win.addstr(10,5,"                   ")
+
 
     elif status==1:
         add_new_number()
