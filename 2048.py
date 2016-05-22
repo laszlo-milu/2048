@@ -105,8 +105,8 @@ def add_left(x): #if two numbers are of the same value next to each other in the
     global valid_move
     for i in range(3):
         if numbers[x][i]==numbers[x][i+1] and numbers[x][i]!=0:
-            numbers[x][i+1]=numbers[x][i+1]*2
-            numbers[x][i]=0
+            numbers[x][i]=numbers[x][i]*2
+            numbers[x][i+1]=0
             status=1
             valid_move=0
         else:
@@ -119,8 +119,8 @@ def add_up(y): #if two numbers are of the same value next to each other in the p
     global valid_move
     for i in range(3):
         if numbers[i][y]==numbers[i+1][y] and numbers[i][y]!=0:
-            numbers[i+1][y]=numbers[i+1][y]*2
-            numbers[i][y]=0
+            numbers[i][y]=numbers[i][y]*2
+            numbers[i+1][y]=0
             status=1
             valid_move=0
         else:
@@ -133,8 +133,8 @@ def add_right(x): #if two numbers are of the same value next to each other in th
     global valid_move
     for i in reversed(range(3)):
         if numbers[x][i]==numbers[x][i+1] and numbers[x][i+1]!=0:
-            numbers[x][i]=numbers[x][i]*2
-            numbers[x][i+1]=0
+            numbers[x][i+1]=numbers[x][i+1]*2
+            numbers[x][i]=0
             status=1
             valid_move=0
         else:
@@ -147,8 +147,8 @@ def add_down(y): #if two numbers are of the same value next to each other in the
     global valid_move
     for i in reversed(range(3)):
         if numbers[i][y]==numbers[i+1][y] and numbers[i][y]!=0:
-            numbers[i][y]=numbers[i][y]*2
-            numbers[i+1][y]=0
+            numbers[i+1][y]=numbers[i+1][y]*2
+            numbers[i][y]=0
             status=1
             valid_move=0
         else:
