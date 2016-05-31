@@ -1,5 +1,6 @@
 import random
 import curses
+from time import sleep
 from curses import KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN
 screen = curses.initscr()
 curses.noecho()
@@ -239,17 +240,17 @@ def add_new_number():
     else:
         status = 2
         if status == 2:
-            win.addstr(10, 1, "Try other direction")
+            win.addstr(10, 1, "Try other direction", curses.A_BOLD)
 
 add_new_number()
-win.addstr(10, 1, "Press ESC to quit")
+win.addstr(10, 1, "Press ESC to quit", curses.A_BOLD)
 while True:
 
     ch = win.getch()
     for y in range(4):
         for x in range(4):
             win.addstr(1+y*2, 1+x*5, "     ")
-            win.addstr(1+y*2, 1+x*5, str(numbers[y][x]))
+            win.addstr(1+y*2, 1+x*5, str(numbers[y][x]), curses.A_BOLD)
 
     if ch == curses.KEY_LEFT:
         key_left_pressed()
@@ -265,7 +266,7 @@ while True:
 
     if valid_move == 4:
         win.addstr(10, 1, "                   ")
-        win.addstr(10, 1, "Game over!")
+        win.addstr(10, 1, "Game over!", curses.A_BOLD)
 
     if ch == 27:
         break
