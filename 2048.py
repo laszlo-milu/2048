@@ -2,6 +2,20 @@ import random
 import curses
 from curses import KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN
 screen = curses.initscr()
+curses.start_color()
+curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
+curses.init_pair(2, 229, curses.COLOR_BLACK)
+curses.init_pair(3, 227, curses.COLOR_BLACK)
+curses.init_pair(4, 221, curses.COLOR_BLACK)
+curses.init_pair(5, 209, curses.COLOR_BLACK)
+curses.init_pair(6, 203, curses.COLOR_BLACK)
+curses.init_pair(7, 9, curses.COLOR_BLACK)
+curses.init_pair(8, 197, curses.COLOR_BLACK)
+curses.init_pair(9, 161, curses.COLOR_BLACK)
+curses.init_pair(10, 125, curses.COLOR_BLACK)
+curses.init_pair(11, 126, curses.COLOR_BLACK)
+curses.init_pair(12, 90, curses.COLOR_BLACK)
+
 curses.noecho()
 curses.curs_set(0)
 win = curses.newwin(12, 22, 0, 0)
@@ -10,34 +24,35 @@ win.keypad(1)
 win.border(0)
 win.nodelay(1)
 
-numbers = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+# numbers = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 '''following line makes testing easier for game over:
 comment out the numbers list filled with zeros and use the following numbers variable instead.'''
-# numbers = [[1, 3, 5, 7], [9, 11, 13, 15], [17, 0, 0, 0], [2501, 1337, 1234, 5678]]
+numbers = [[0, 2, 4, 8], [16, 32, 64, 128], [256, 512, 1024, 1024], [512, 1024, 1024, 1024]]
 
 status = 1    # status variable tracks if moving or addition actions were successfully made after a new number was added
 
+color = 0
 
 def move_left(x):  # modified bubble sorting algorithm that moves all the zeros to the right place
     global numbers
     global status
     global valid_move
     exchanges = True
-    passnum = len(numbers)-1
+    passnum = len(numbers) - 1
     while passnum > 0 and exchanges:
         exchanges = False
         for i in range(passnum):
-            if numbers[x][i] < numbers[x][i+1] and numbers[x][i] == 0:
+            if numbers[x][i] < numbers[x][i + 1] and numbers[x][i] == 0:
                 exchanges = True
                 temp = numbers[x][i]
-                numbers[x][i] = numbers[x][i+1]
-                numbers[x][i+1] = temp
+                numbers[x][i] = numbers[x][i + 1]
+                numbers[x][i + 1] = temp
                 status = 1
                 valid_move = 0
             else:
                 if valid_move == 0:
-                    valid_move = valid_move+1
-        passnum = passnum-1
+                    valid_move = valid_move + 1
+        passnum = passnum - 1
 
 
 def move_up(y):  # modified bubble sorting algorithm that moves all the zeros to the right place
@@ -45,21 +60,21 @@ def move_up(y):  # modified bubble sorting algorithm that moves all the zeros to
     global status
     global valid_move
     exchanges = True
-    passnum = len(numbers)-1
+    passnum = len(numbers) - 1
     while passnum > 0 and exchanges:
         exchanges = False
         for i in range(passnum):
-            if numbers[i][y] < numbers[i+1][y] and numbers[i][y] == 0:
+            if numbers[i][y] < numbers[i + 1][y] and numbers[i][y] == 0:
                 exchanges = True
                 temp = numbers[i][y]
-                numbers[i][y] = numbers[i+1][y]
-                numbers[i+1][y] = temp
+                numbers[i][y] = numbers[i + 1][y]
+                numbers[i + 1][y] = temp
                 status = 1
                 valid_move = 0
             else:
                 if valid_move == 1:
-                    valid_move = valid_move+1
-        passnum = passnum-1
+                    valid_move = valid_move + 1
+        passnum = passnum - 1
 
 
 def move_right(x):  # modified bubble sorting algorithm that moves all the zeros to the right place
@@ -67,21 +82,21 @@ def move_right(x):  # modified bubble sorting algorithm that moves all the zeros
     global status
     global valid_move
     exchanges = True
-    passnum = len(numbers)-1
+    passnum = len(numbers) - 1
     while passnum > 0 and exchanges:
         exchanges = False
         for i in range(passnum):
-            if numbers[x][i] > numbers[x][i+1] and numbers[x][i+1] == 0:
+            if numbers[x][i] > numbers[x][i + 1] and numbers[x][i + 1] == 0:
                 exchanges = True
                 temp = numbers[x][i]
-                numbers[x][i] = numbers[x][i+1]
-                numbers[x][i+1] = temp
+                numbers[x][i] = numbers[x][i + 1]
+                numbers[x][i + 1] = temp
                 status = 1
                 valid_move = 0
             else:
                 if valid_move == 2:
-                    valid_move = valid_move+1
-        passnum = passnum-1
+                    valid_move = valid_move + 1
+        passnum = passnum - 1
 
 
 def move_down(y):  # modified bubble sorting algorithm that moves all the zeros to the right place
@@ -89,21 +104,21 @@ def move_down(y):  # modified bubble sorting algorithm that moves all the zeros 
     global status
     global valid_move
     exchanges = True
-    passnum = len(numbers)-1
+    passnum = len(numbers) - 1
     while passnum > 0 and exchanges:
         exchanges = False
         for i in range(passnum):
-            if numbers[i][y] > numbers[i+1][y] and numbers[i+1][y] == 0:
+            if numbers[i][y] > numbers[i + 1][y] and numbers[i + 1][y] == 0:
                 exchanges = True
                 temp = numbers[i][y]
-                numbers[i][y] = numbers[i+1][y]
-                numbers[i+1][y] = temp
+                numbers[i][y] = numbers[i + 1][y]
+                numbers[i + 1][y] = temp
                 status = 1
                 valid_move = 0
             else:
                 if valid_move == 3:
-                    valid_move = valid_move+1
-        passnum = passnum-1
+                    valid_move = valid_move + 1
+        passnum = passnum - 1
 
 '''if two numbers are of the same value next to each other in the plane of the pressed key,
 this function multiplies one of them by 2 and makes the other number a zero.'''
@@ -114,14 +129,14 @@ def add_left(x):
     global status
     global valid_move
     for i in range(3):
-        if numbers[x][i] == numbers[x][i+1] and numbers[x][i] != 0:
-            numbers[x][i] = numbers[x][i]*2
-            numbers[x][i+1] = 0
+        if numbers[x][i] == numbers[x][i + 1] and numbers[x][i] != 0:
+            numbers[x][i] = numbers[x][i] * 2
+            numbers[x][i + 1] = 0
             status = 1
             valid_move = 0
         else:
             if valid_move == 0:
-                valid_move = valid_move+1
+                valid_move = valid_move + 1
 
 '''if two numbers are of the same value next to each other in the plane of the pressed key,
 this function multiplies one of them by 2 and makes the other number a zero.'''
@@ -132,14 +147,14 @@ def add_up(y):
     global status
     global valid_move
     for i in range(3):
-        if numbers[i][y] == numbers[i+1][y] and numbers[i][y] != 0:
-            numbers[i][y] = numbers[i][y]*2
-            numbers[i+1][y] = 0
+        if numbers[i][y] == numbers[i + 1][y] and numbers[i][y] != 0:
+            numbers[i][y] = numbers[i][y] * 2
+            numbers[i + 1][y] = 0
             status = 1
             valid_move = 0
         else:
             if valid_move == 1:
-                valid_move = valid_move+1
+                valid_move = valid_move + 1
 
 '''if two numbers are of the same value next to each other in the plane of the pressed key,
 this function multiplies one of them by 2 and makes the other number a zero.'''
@@ -150,14 +165,14 @@ def add_right(x):
     global status
     global valid_move
     for i in reversed(range(3)):
-        if numbers[x][i] == numbers[x][i+1] and numbers[x][i+1] != 0:
-            numbers[x][i+1] = numbers[x][i+1]*2
+        if numbers[x][i] == numbers[x][i + 1] and numbers[x][i + 1] != 0:
+            numbers[x][i + 1] = numbers[x][i + 1] * 2
             numbers[x][i] = 0
             status = 1
             valid_move = 0
         else:
             if valid_move == 2:
-                valid_move = valid_move+1
+                valid_move = valid_move + 1
 
 '''if two numbers are of the same value next to each other in the plane of the pressed key,
 this function multiplies one of them by 2 and makes the other number a zero.'''
@@ -168,14 +183,14 @@ def add_down(y):
     global status
     global valid_move
     for i in reversed(range(3)):
-        if numbers[i][y] == numbers[i+1][y] and numbers[i][y] != 0:
-            numbers[i+1][y] = numbers[i+1][y]*2
+        if numbers[i][y] == numbers[i + 1][y] and numbers[i][y] != 0:
+            numbers[i + 1][y] = numbers[i + 1][y] * 2
             numbers[i][y] = 0
             status = 1
             valid_move = 0
         else:
             if valid_move == 3:
-                valid_move = valid_move+1
+                valid_move = valid_move + 1
 
 
 def key_left_pressed():  # what happens when the given key is pressed
@@ -219,7 +234,8 @@ def add_new_number():
     global status
     global highest
     global valid_move
-    y = random.randrange(4)  # These two generate a random coordinate for the new numebr to be added.
+    y = random.randrange(
+        4)  # These two generate a random coordinate for the new numebr to be added.
     x = random.randrange(4)
 
     if numbers[y][x] == 0 and status == 1:
@@ -241,6 +257,33 @@ def add_new_number():
         if status == 2:
             win.addstr(10, 1, "Try other direction")
 
+
+def colors(num):
+    if num == 2:
+        return 2
+    elif num == 4:
+        return 3
+    elif num == 8:
+        return 4
+    elif num == 16:
+        return 5
+    elif num == 32:
+        return 6
+    elif num == 64:
+        return 7
+    elif num == 128:
+        return 8
+    elif num == 256:
+        return 9
+    elif num == 512:
+        return 10
+    elif num == 1024:
+        return 11
+    elif num == 2048:
+        return 12
+    else:
+        return 1
+
 add_new_number()
 win.addstr(10, 1, "Press ESC to quit")
 while True:
@@ -248,8 +291,9 @@ while True:
     ch = win.getch()
     for y in range(4):
         for x in range(4):
-            win.addstr(1+y*2, 1+x*5, "     ")
-            win.addstr(1+y*2, 1+x*5, str(numbers[y][x]))
+            color = colors(numbers[y][x])
+            win.addstr(1 + y * 2, 1 + x * 5, "     ")
+            win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color))
 
     if ch == curses.KEY_LEFT:
         key_left_pressed()
