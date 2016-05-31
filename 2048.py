@@ -4,18 +4,18 @@ import curses
 from curses import KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN
 screen = curses.initscr()
 curses.start_color()
-curses.init_pair(1, 229, curses.COLOR_BLACK)
-curses.init_pair(2, 227, curses.COLOR_BLACK)
-curses.init_pair(3, 221, curses.COLOR_BLACK)
-curses.init_pair(4, 209, curses.COLOR_BLACK)
-curses.init_pair(5, 203, curses.COLOR_BLACK)
-curses.init_pair(6, 9, curses.COLOR_BLACK)
-curses.init_pair(7, 197, curses.COLOR_BLACK)
-curses.init_pair(8, 161, curses.COLOR_BLACK)
-curses.init_pair(9, 125, curses.COLOR_BLACK)
-curses.init_pair(10, 126, curses.COLOR_BLACK)
-curses.init_pair(11, 90, curses.COLOR_BLACK)
-curses.init_pair(12, curses.COLOR_WHITE, curses.COLOR_BLACK)
+curses.init_pair(1, 229, curses.COLOR_BLACK)  # color code for number 2
+curses.init_pair(2, 227, curses.COLOR_BLACK)  # color code for number 4
+curses.init_pair(3, 221, curses.COLOR_BLACK)  # color code for number 8
+curses.init_pair(4, 209, curses.COLOR_BLACK)  # color code for number 16
+curses.init_pair(5, 203, curses.COLOR_BLACK)  # color code for number 32
+curses.init_pair(6, 9, curses.COLOR_BLACK)  # color code for number 64
+curses.init_pair(7, 197, curses.COLOR_BLACK)  # color code for number 128
+curses.init_pair(8, 161, curses.COLOR_BLACK)  # color code for number 256
+curses.init_pair(9, 125, curses.COLOR_BLACK)  # color code for number 512
+curses.init_pair(10, 126, curses.COLOR_BLACK)  # color code for number 1024
+curses.init_pair(11, 90, curses.COLOR_BLACK)  # color code for number 2048
+curses.init_pair(12, curses.COLOR_WHITE, curses.COLOR_BLACK)  # color code for number 0
 
 curses.noecho()
 curses.curs_set(0)
@@ -30,7 +30,7 @@ numbers = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 comment out the numbers list filled with zeros and use the following numbers variable instead.'''
 # numbers = [[0, 2, 4, 8], [16, 32, 64, 128], [256, 512, 1024, 2048], [0, 0, 0, 0]]
 
-status = 1    # status variable tracks if moving or addition actions were successfully made after a new number was added
+status = 1  # status variable tracks if moving or addition actions were successfully made after a new number was added
 color = 0
 
 
@@ -230,18 +230,18 @@ def key_down_pressed():  # what happens when the given key is pressed
     add_new_number()
 
 
-def add_new_number():
+def add_new_number(gen_num=None):
     global numbers
     global status
     global highest
     global valid_move
-    y = random.randrange(
-        4)  # These two generate a random coordinate for the new numebr to be added.
+    if not gen_num:
+        gen_num = random.randrange(10)
+    y = random.randrange(4)  # These two generate a random coordinate for the new numeber to be added.
     x = random.randrange(4)
 
     if numbers[y][x] == 0 and status == 1:
-        two_or_four = random.randrange(10)
-        if two_or_four != 1:
+        if gen_num != 1:
             numbers[y][x] = 2
         else:
             numbers[y][x] = 4  # with a 10% chance of adding a 4
@@ -265,7 +265,7 @@ def colors(num):
     else:
         return int(math.log2(num))
 
-add_new_number()
+add_new_number(2)
 win.addstr(10, 1, "Press ESC to quit")
 while True:
 
