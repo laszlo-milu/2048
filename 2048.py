@@ -230,18 +230,18 @@ def key_down_pressed():  # what happens when the given key is pressed
     add_new_number()
 
 
-def add_new_number(gen_num=None):
+def add_new_number():
     global numbers
     global status
     global highest
     global valid_move
-    if not gen_num:
-        gen_num = random.randrange(10)
+
+    two_or_four = random.randrange(10)
     y = random.randrange(4)  # These two generate a random coordinate for the new numeber to be added.
     x = random.randrange(4)
 
     if numbers[y][x] == 0 and status == 1:
-        if gen_num != 1:
+        if two_or_four != 1:
             numbers[y][x] = 2
         else:
             numbers[y][x] = 4  # with a 10% chance of adding a 4
@@ -265,7 +265,10 @@ def colors(num):
     else:
         return int(math.log2(num))
 
-add_new_number(2)
+add_new_number()
+status = 1
+add_new_number()
+win.addstr(10, 1, "                   ")
 win.addstr(10, 1, "Press ESC to quit")
 while True:
 
