@@ -288,20 +288,21 @@ def restart(re=False):
     add_new_number(2)
     status = 1
     add_new_number(2)
-    win.addstr(8, 1, "                    ", curses.A_UNDERLINE)
-    win.addstr(9, 1, "Are you sensitive to")
-    win.addstr(10, 1, "  flashing lights?  ")
-    win.addstr(11, 1, "       (y/n)        ")
-    win.refresh()
-    ch = win.getch()
-    while ch != 121 or 110:
+    if not re:
+        win.addstr(8, 1, "                    ", curses.A_UNDERLINE)
+        win.addstr(9, 1, "Are you sensitive to")
+        win.addstr(10, 1, "  flashing lights?  ")
+        win.addstr(11, 1, "       (y/n)        ")
+        win.refresh()
         ch = win.getch()
-        if ch == 121:
-            flashing = 0
-            break
-        if ch == 110:
-            flashing = 1
-            break
+        while ch != 121 or 110:
+            ch = win.getch()
+            if ch == 121:
+                flashing = 0
+                break
+            if ch == 110:
+                flashing = 1
+                break
     win.addstr(9, 1, "                    ")
     win.addstr(10, 1, "                    ")
     win.addstr(11, 1, "reset=r     exit=esc", curses.A_DIM)
