@@ -250,7 +250,8 @@ def add_new_number():
         if status == 2:
             win.addstr(9, 1, "                    ")
             win.addstr(9, 1, "Try other direction")
-            curses.flash()
+            if flashing == 1:
+                curses.flash()
 
 
 def colors(num):
@@ -263,10 +264,12 @@ def colors(num):
 def restart(re=False):
     global numbers
     global status
+    global flashing
+
     numbers = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     '''following line makes testing easier for the colors:
     comment out the numbers list filled with zeros and use the following numbers variable instead.'''
-    # numbers = [[0, 2, 4, 8], [16, 32, 64, 128], [256, 512, 1024, 2048], [0, 0, 0, 0]]
+    # numbers = [[0, 2, 4, 8], [16, 32, 64, 128], [256, 512, 1024, 2048], [2, 4, 8, 0]]
 
     status = 1  # status variable tracks if valid action was made after a new number was added
     add_new_number()
@@ -274,6 +277,22 @@ def restart(re=False):
     add_new_number()
     win.addstr(8, 1, "____________________")
     win.addstr(9, 1, "                    ")
+    win.addstr(11, 1, "                    ")
+    win.addstr(9, 1, "Are you sensitive to")
+    win.addstr(10, 1, "  flashing lights?")
+    win.addstr(11, 1, "       (y/n)      ")
+    ch = win.getch()
+    while ch != 121 or 110:
+        ch = win.getch()
+        if ch == 121:
+            flashing = 0
+            break
+        if ch == 110:
+            flashing = 1
+            break
+    win.addstr(9, 1, "                    ")
+    win.addstr(10, 1, "                    ")
+    win.addstr(11, 1, "                    ")
     win.addstr(11, 1, "Reset=r     Exit=esc")
     if re:
         return
@@ -305,7 +324,7 @@ def printing_and_monitoring():
 
         if valid_move == 4:
             win.addstr(9, 1, "                    ")
-            win.addstr(9, 1, "Game over!")
+            win.addstr(9, 1, "     Game  Over")
 
         if ch == 27:
             exit = 1
