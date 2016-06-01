@@ -4,34 +4,29 @@ import curses
 from curses import KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN
 screen = curses.initscr()
 curses.start_color()
-curses.init_pair(1, 229, curses.COLOR_BLACK)  # color code for number 2
-curses.init_pair(2, 227, curses.COLOR_BLACK)  # color code for number 4
-curses.init_pair(3, 221, curses.COLOR_BLACK)  # color code for number 8
-curses.init_pair(4, 209, curses.COLOR_BLACK)  # color code for number 16
-curses.init_pair(5, 203, curses.COLOR_BLACK)  # color code for number 32
-curses.init_pair(6, 9, curses.COLOR_BLACK)  # color code for number 64
-curses.init_pair(7, 197, curses.COLOR_BLACK)  # color code for number 128
-curses.init_pair(8, 161, curses.COLOR_BLACK)  # color code for number 256
-curses.init_pair(9, 125, curses.COLOR_BLACK)  # color code for number 512
-curses.init_pair(10, 126, curses.COLOR_BLACK)  # color code for number 1024
-curses.init_pair(11, 90, curses.COLOR_BLACK)  # color code for number 2048
-curses.init_pair(12, curses.COLOR_WHITE, curses.COLOR_BLACK)  # color code for number 0
+curses.use_default_colors()
+curses.init_pair(1, 229, -1)  # color code for number 2
+curses.init_pair(2, 227, -1)  # color code for number 4
+curses.init_pair(3, 221, -1)  # color code for number 8
+curses.init_pair(4, 209, -1)  # color code for number 16
+curses.init_pair(5, 203, -1)  # color code for number 32
+curses.init_pair(6, 9, -1)  # color code for number 64
+curses.init_pair(7, 197, -1)  # color code for number 128
+curses.init_pair(8, 161, -1)  # color code for number 256
+curses.init_pair(9, 125, -1)  # color code for number 512
+curses.init_pair(10, 126, -1)  # color code for number 1024
+curses.init_pair(11, 90, -1)  # color code for number 2048
+curses.init_pair(12, curses.COLOR_WHITE, -1)  # color code for number 0
 
 curses.noecho()
 curses.curs_set(0)
-win = curses.newwin(12, 22, 0, 0)
-# win = curses.newwin(curses.LINES, curses.COLS, 0, 0)
+win = curses.newwin(13, 22, 0, 0)
+# win = curses.newwin(curses.LINES, curses.COLS, 0,
 win.keypad(1)
 win.border(0)
 win.nodelay(1)
 
-numbers = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
-'''following line makes testing easier for the colors:
-comment out the numbers list filled with zeros and use the following numbers variable instead.'''
-# numbers = [[0, 2, 4, 8], [16, 32, 64, 128], [256, 512, 1024, 2048], [0, 0, 0, 0]]
-
-status = 1  # status variable tracks if moving or addition actions were successfully made after a new number was added
-color = 0
+# win = curses.newwin(12, 22, 0, 23)
 
 
 def move_left(x):  # modified bubble sorting algorithm that moves all the zeros to the right place
@@ -248,15 +243,16 @@ def add_new_number():
         status = 0
         valid_move = 0
         highest = max(numbers)
-        win.addstr(10, 1, "                   ")
+        win.addstr(9, 1, "                    ")
 
     elif status == 1:
         add_new_number()
-        win.addstr(10, 1, "                   ")
+        win.addstr(9, 1, "                    ")
     else:
         status = 2
         if status == 2:
-            win.addstr(10, 1, "Try other direction")
+            win.addstr(9, 1, "                    ")
+            win.addstr(9, 1, "Try other direction")
 
 
 def colors(num):
@@ -265,37 +261,72 @@ def colors(num):
     else:
         return int(math.log2(num))
 
-add_new_number()
-status = 1
-add_new_number()
-win.addstr(10, 1, "                   ")
-win.addstr(10, 1, "Press ESC to quit")
-while True:
 
-    ch = win.getch()
-    for y in range(4):
-        for x in range(4):
-            color = colors(numbers[y][x])
-            win.addstr(1 + y * 2, 1 + x * 5, "     ")
-            win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color))
+def restart(re=False):
+    global numbers
+    global status
+    numbers = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+    '''following line makes testing easier for the colors:
+    comment out the numbers list filled with zeros and use the following numbers variable instead.'''
+    # numbers = [[0, 2, 4, 8], [16, 32, 64, 128], [256, 512, 1024, 2048], [0, 0, 0, 0]]
 
-    if ch == curses.KEY_LEFT:
-        key_left_pressed()
+    status = 1  # status variable tracks if valid action was made after a new number was added
+    add_new_number()
+    status = 1
+    add_new_number()
+    win.addstr(8, 1, "____________________")
+    win.addstr(9, 1, "                    ")
+    win.addstr(11, 1, "Reset=r     Exit=esc")
+    if re:
+        return
+    else:
+        printing_and_monitoring()
 
-    if ch == curses.KEY_RIGHT:
-        key_right_pressed()
 
-    if ch == curses.KEY_UP:
-        key_up_pressed()
+def printing_and_monitoring():
+    while True:
+        ch = win.getch()
 
-    if ch == curses.KEY_DOWN:
-        key_down_pressed()
+        for y in range(4):
+            for x in range(4):
+                color = colors(numbers[y][x])
+                win.addstr(1 + y * 2, 1 + x * 5, "     ")
+                win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color))
 
-    if valid_move == 4:
-        win.addstr(10, 1, "                   ")
-        win.addstr(10, 1, "Game over!", curses.A_BOLD)
+        if ch == curses.KEY_LEFT:
+            key_left_pressed()
 
-    if ch == 27:
-        break
+        if ch == curses.KEY_RIGHT:
+            key_right_pressed()
 
+        if ch == curses.KEY_UP:
+            key_up_pressed()
+
+        if ch == curses.KEY_DOWN:
+            key_down_pressed()
+
+        if valid_move == 4:
+            win.addstr(9, 1, "                    ")
+            win.addstr(9, 1, "Game over!")
+
+        if ch == 27:
+            exit = 1
+            break
+
+        if ch == 114:
+            win.addstr(9, 1, "                    ")
+            win.addstr(9, 1, "Are you sure? (y/n)")
+            while ch != 121 or 110:
+                ch = win.getch()
+                if ch == 121:
+                    restart(True)
+                    break
+                if ch == 110:
+                    win.addstr(9, 1, "                    ")
+                    break
+
+
+
+color = 0
+restart()
 curses.endwin()
