@@ -21,12 +21,10 @@ curses.init_pair(12, curses.COLOR_WHITE, -1)  # color code for number 0
 curses.noecho()
 curses.curs_set(0)
 win = curses.newwin(13, 22, 0, 0)
-# win = curses.newwin(curses.LINES, curses.COLS, 0,
+
 win.keypad(1)
 win.border(0)
 win.nodelay(1)
-
-# win = curses.newwin(12, 22, 0, 23)
 
 
 def move_left(x):  # modified bubble sorting algorithm that moves all the zeros to the right place
@@ -230,7 +228,6 @@ def add_new_number():
     global status
     global highest
     global valid_move
-
     two_or_four = random.randrange(10)
     y = random.randrange(4)  # These two generate a random coordinate for the new numeber to be added.
     x = random.randrange(4)
@@ -253,6 +250,7 @@ def add_new_number():
         if status == 2:
             win.addstr(9, 1, "                    ")
             win.addstr(9, 1, "Try other direction")
+            curses.flash()
 
 
 def colors(num):
@@ -324,8 +322,6 @@ def printing_and_monitoring():
                 if ch == 110:
                     win.addstr(9, 1, "                    ")
                     break
-
-
 
 color = 0
 restart()
