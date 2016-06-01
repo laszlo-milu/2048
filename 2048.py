@@ -24,10 +24,10 @@ win.keypad(1)
 win.border(0)
 win.nodelay(1)
 
-# numbers = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
-'''following line makes testing easier for game over:
-comment out the numbers list filled with zeros and use the following numbers variable instead.'''
-numbers = [[0, 2, 4, 8], [16, 32, 64, 128], [256, 512, 1024, 1024], [512, 1024, 1024, 1024]]
+numbers = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+# '''following line makes testing easier for game over:
+# comment out the numbers list filled with zeros and use the following numbers variable instead.'''
+# numbers = [[0, 2, 4, 8], [16, 32, 64, 128], [256, 512, 1024, 1024], [512, 1024, 1024, 1024]]
 
 status = 1    # status variable tracks if moving or addition actions were successfully made after a new number was added
 
