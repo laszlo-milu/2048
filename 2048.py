@@ -223,33 +223,45 @@ def key_down_pressed():  # what happens when the given key is pressed
     add_new_number()
 
 
-def add_new_number():
+def add_new_number(double=False):
     global numbers
     global status
     global highest
     global valid_move
+    global color
     two_or_four = random.randrange(10)
+    double_gen = False
+    if double:
+        double_gen = True
+
     y = random.randrange(4)  # These two generate a random coordinate for the new numeber to be added.
     x = random.randrange(4)
-
+    if not double_gen:
+        printing()
     if numbers[y][x] == 0 and status == 1:
         if two_or_four != 1:
             numbers[y][x] = 2
+            color = colors(numbers[y][x])
+            win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color) | curses.A_BOLD)
         else:
             numbers[y][x] = 4  # with a 10% chance of adding a 4
+            color = colors(numbers[y][x])
+            win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color) | curses.A_BOLD)
         status = 0
         valid_move = 0
         highest = max(numbers)
         win.addstr(9, 1, "                    ")
+        win.refresh()
 
     elif status == 1:
         add_new_number()
         win.addstr(9, 1, "                    ")
+        win.refresh()
     else:
         status = 2
         if status == 2:
-            win.addstr(9, 1, "                    ")
-            win.addstr(9, 1, "Try other direction")
+            win.addstr(9, 1, "Try other direction ")
+            win.refresh()
             if flashing == 1:
                 curses.flash()
 
@@ -272,15 +284,15 @@ def restart(re=False):
     # numbers = [[0, 2, 4, 8], [16, 32, 64, 128], [256, 512, 1024, 2048], [2, 4, 8, 0]]
 
     status = 1  # status variable tracks if valid action was made after a new number was added
-    add_new_number()
+    printing()
+    add_new_number(2)
     status = 1
-    add_new_number()
-    win.addstr(8, 1, "____________________")
-    win.addstr(9, 1, "                    ")
-    win.addstr(11, 1, "                    ")
+    add_new_number(2)
+    win.addstr(8, 1, "                    ", curses.A_UNDERLINE)
     win.addstr(9, 1, "Are you sensitive to")
-    win.addstr(10, 1, "  flashing lights?")
-    win.addstr(11, 1, "       (y/n)      ")
+    win.addstr(10, 1, "  flashing lights?  ")
+    win.addstr(11, 1, "       (y/n)        ")
+    win.refresh()
     ch = win.getch()
     while ch != 121 or 110:
         ch = win.getch()
@@ -292,23 +304,33 @@ def restart(re=False):
             break
     win.addstr(9, 1, "                    ")
     win.addstr(10, 1, "                    ")
-    win.addstr(11, 1, "                    ")
-    win.addstr(11, 1, "Reset=r     Exit=esc")
+    win.addstr(11, 1, "reset=r     exit=esc", curses.A_DIM)
+    win.addstr(11, 7, "r", curses.A_BOLD)
+    win.addstr(11, 18, "esc", curses.A_BOLD)
+    win.refresh()
     if re:
         return
     else:
-        printing_and_monitoring()
+        monitoring()
 
 
-def printing_and_monitoring():
+def printing():
+    for y in range(4):
+        for x in range(4):
+            color = colors(numbers[y][x])
+            win.addstr(1 + y * 2, 1 + x * 5, "     ")
+            win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color))
+
+
+def monitoring():
     while True:
         ch = win.getch()
 
-        for y in range(4):
-            for x in range(4):
-                color = colors(numbers[y][x])
-                win.addstr(1 + y * 2, 1 + x * 5, "     ")
-                win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color))
+        # for y in range(4):
+        #     for x in range(4):
+        #         color = colors(numbers[y][x])
+        #         win.addstr(1 + y * 2, 1 + x * 5, "     ")
+        #         win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color))
 
         if ch == curses.KEY_LEFT:
             key_left_pressed()
@@ -323,16 +345,16 @@ def printing_and_monitoring():
             key_down_pressed()
 
         if valid_move == 4:
-            win.addstr(9, 1, "                    ")
-            win.addstr(9, 1, "     Game  Over")
+            win.addstr(9, 1, "     Game  Over     ")
+            win.refresh()
 
         if ch == 27:
             exit = 1
             break
 
         if ch == 114:
-            win.addstr(9, 1, "                    ")
-            win.addstr(9, 1, "Are you sure? (y/n)")
+            win.addstr(9, 1, "Are you sure? (y/n) ")
+            win.refresh()
             while ch != 121 or 110:
                 ch = win.getch()
                 if ch == 121:
@@ -340,6 +362,7 @@ def printing_and_monitoring():
                     break
                 if ch == 110:
                     win.addstr(9, 1, "                    ")
+                    win.refresh()
                     break
 
 color = 0
