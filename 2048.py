@@ -230,23 +230,18 @@ def add_new_number(double=False):
     global valid_move
     global color
     two_or_four = random.randrange(10)
-    double_gen = False
-    if double:
-        double_gen = True
-
     y = random.randrange(4)  # These two generate a random coordinate for the new numeber to be added.
     x = random.randrange(4)
-    if not double_gen:
+    if not double:
         printing()
     if numbers[y][x] == 0 and status == 1:
         if two_or_four != 1:
             numbers[y][x] = 2
             color = colors(numbers[y][x])
-            win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color) | curses.A_BOLD)
         else:
             numbers[y][x] = 4  # with a 10% chance of adding a 4
             color = colors(numbers[y][x])
-            win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color) | curses.A_BOLD)
+        win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color) | curses.A_BOLD)
         status = 0
         valid_move = 0
         highest = max(numbers)
@@ -279,9 +274,9 @@ def restart(re=False):
     global flashing
 
     numbers = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
-    '''following line makes testing easier for the colors:
+    '''following line makes testing easier for the colors and game over:
     comment out the numbers list filled with zeros and use the following numbers variable instead.'''
-    # numbers = [[0, 2, 4, 8], [16, 32, 64, 128], [256, 512, 1024, 2048], [2, 4, 8, 0]]
+    # numbers = [[0, 2, 4, 8], [16, 32, 64, 128], [256, 512, 1024, 2048], [0, 0, 0, 0]]
 
     status = 1  # status variable tracks if valid action was made after a new number was added
     printing()
@@ -320,18 +315,15 @@ def printing():
         for x in range(4):
             color = colors(numbers[y][x])
             win.addstr(1 + y * 2, 1 + x * 5, "     ")
-            win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color))
+            if numbers[y][x] != 0:
+                win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color))
+            else:
+                win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color) | curses.A_DIM)
 
 
 def monitoring():
     while True:
         ch = win.getch()
-
-        # for y in range(4):
-        #     for x in range(4):
-        #         color = colors(numbers[y][x])
-        #         win.addstr(1 + y * 2, 1 + x * 5, "     ")
-        #         win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color))
 
         if ch == curses.KEY_LEFT:
             key_left_pressed()
@@ -346,7 +338,7 @@ def monitoring():
             key_down_pressed()
 
         if valid_move == 4:
-            win.addstr(9, 1, "     Game  Over     ")
+            win.addstr(9, 1, "     Game  Over     ", curses.A_BOLD)
             win.refresh()
 
         if ch == 27:
