@@ -1,20 +1,22 @@
 import random
+import math
 import curses
 from curses import KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN
 screen = curses.initscr()
 curses.start_color()
-curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
-curses.init_pair(2, 229, curses.COLOR_BLACK)
-curses.init_pair(3, 227, curses.COLOR_BLACK)
-curses.init_pair(4, 221, curses.COLOR_BLACK)
-curses.init_pair(5, 209, curses.COLOR_BLACK)
-curses.init_pair(6, 203, curses.COLOR_BLACK)
-curses.init_pair(7, 9, curses.COLOR_BLACK)
-curses.init_pair(8, 197, curses.COLOR_BLACK)
-curses.init_pair(9, 161, curses.COLOR_BLACK)
-curses.init_pair(10, 125, curses.COLOR_BLACK)
-curses.init_pair(11, 126, curses.COLOR_BLACK)
-curses.init_pair(12, 90, curses.COLOR_BLACK)
+curses.use_default_colors()
+curses.init_pair(1, 229, -1)  # color code for number 2
+curses.init_pair(2, 227, -1)  # color code for number 4
+curses.init_pair(3, 221, -1)  # color code for number 8
+curses.init_pair(4, 209, -1)  # color code for number 16
+curses.init_pair(5, 203, -1)  # color code for number 32
+curses.init_pair(6, 9, -1)  # color code for number 64
+curses.init_pair(7, 197, -1)  # color code for number 128
+curses.init_pair(8, 161, -1)  # color code for number 256
+curses.init_pair(9, 125, -1)  # color code for number 512
+curses.init_pair(10, 126, -1)  # color code for number 1024
+curses.init_pair(11, 90, -1)  # color code for number 2048
+curses.init_pair(12, curses.COLOR_WHITE, -1)  # color code for number 0
 
 curses.noecho()
 curses.curs_set(0)
@@ -25,13 +27,14 @@ win.border(0)
 win.nodelay(1)
 
 numbers = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
-# '''following line makes testing easier for game over:
-# comment out the numbers list filled with zeros and use the following numbers variable instead.'''
-# numbers = [[0, 2, 4, 8], [16, 32, 64, 128], [256, 512, 1024, 1024], [512, 1024, 1024, 1024]]
 
-status = 1    # status variable tracks if moving or addition actions were successfully made after a new number was added
+'''following line makes testing easier for the colors:
+comment out the numbers list filled with zeros and use the following numbers variable instead.'''
+# numbers = [[0, 2, 4, 8], [16, 32, 64, 128], [256, 512, 1024, 2048], [0, 0, 0, 0]]
 
+status = 1  # status variable tracks if moving or addition actions were successfully made after a new number was added
 color = 0
+
 
 def move_left(x):  # modified bubble sorting algorithm that moves all the zeros to the right place
     global numbers
@@ -234,12 +237,11 @@ def add_new_number():
     global status
     global highest
     global valid_move
-    y = random.randrange(
-        4)  # These two generate a random coordinate for the new numebr to be added.
+    two_or_four = random.randrange(10)
+    y = random.randrange(4)  # These two generate a random coordinate for the new numeber to be added.
     x = random.randrange(4)
 
     if numbers[y][x] == 0 and status == 1:
-        two_or_four = random.randrange(10)
         if two_or_four != 1:
             numbers[y][x] = 2
         else:
@@ -256,35 +258,19 @@ def add_new_number():
         status = 2
         if status == 2:
             win.addstr(10, 1, "Try other direction")
+            curses.flash()
 
 
 def colors(num):
-    if num == 2:
-        return 2
-    elif num == 4:
-        return 3
-    elif num == 8:
-        return 4
-    elif num == 16:
-        return 5
-    elif num == 32:
-        return 6
-    elif num == 64:
-        return 7
-    elif num == 128:
-        return 8
-    elif num == 256:
-        return 9
-    elif num == 512:
-        return 10
-    elif num == 1024:
-        return 11
-    elif num == 2048:
+    if num == 0:
         return 12
     else:
-        return 1
+        return int(math.log2(num))
 
 add_new_number()
+status = 1
+add_new_number()
+win.addstr(10, 1, "                   ")
 win.addstr(10, 1, "Press ESC to quit")
 while True:
 
@@ -309,7 +295,7 @@ while True:
 
     if valid_move == 4:
         win.addstr(10, 1, "                   ")
-        win.addstr(10, 1, "Game over!")
+        win.addstr(10, 1, "Game over!", curses.A_BOLD)
 
     if ch == 27:
         break
