@@ -121,10 +121,13 @@ def add_left(x):
     global numbers
     global action
     global invalid_move
+    score_to_add = 0
     for i in range(3):
         if numbers[x][i] == numbers[x][i + 1] and numbers[x][i] != 0:
             numbers[x][i] = numbers[x][i] * 2
             numbers[x][i + 1] = 0
+            score_to_add = score_to_add + numbers[x][i]
+            score_added(score_to_add)
             action = 1
             invalid_move = 0
         else:
@@ -138,10 +141,13 @@ def add_up(y):
     global numbers
     global action
     global invalid_move
+    score_to_add = 0
     for i in range(3):
         if numbers[i][y] == numbers[i + 1][y] and numbers[i][y] != 0:
             numbers[i][y] = numbers[i][y] * 2
             numbers[i + 1][y] = 0
+            score_to_add = score_to_add + numbers[i][y]
+            score_added(score_to_add)
             action = 1
             invalid_move = 0
         else:
@@ -155,10 +161,13 @@ def add_right(x):
     global numbers
     global action
     global invalid_move
+    score_to_add = 0
     for i in reversed(range(3)):
         if numbers[x][i] == numbers[x][i + 1] and numbers[x][i + 1] != 0:
             numbers[x][i + 1] = numbers[x][i + 1] * 2
             numbers[x][i] = 0
+            score_to_add = score_to_add + numbers[x][i + 1]
+            score_added(score_to_add)
             action = 1
             invalid_move = 0
         else:
@@ -172,15 +181,25 @@ def add_down(y):
     global numbers
     global action
     global invalid_move
+    score_to_add = 0
     for i in reversed(range(3)):
         if numbers[i][y] == numbers[i + 1][y] and numbers[i][y] != 0:
             numbers[i + 1][y] = numbers[i + 1][y] * 2
             numbers[i][y] = 0
+            score_to_add = score_to_add + numbers[i + 1][y]
+            score_added(score_to_add)
             action = 1
             invalid_move = 0
         else:
             if invalid_move == 3:
                 invalid_move = invalid_move + 1
+
+
+def score_added(score_to_add):
+    global score
+    score = score + score_to_add
+    win.addstr(10, 1, "Score:")
+    win.addstr(10, 8, str(score))
 
 
 def key_left_pressed():  # what happens when the given key is pressed
@@ -268,12 +287,14 @@ def restart(re=False):
     global numbers
     global action
     global flashing
+    global score
 
     numbers = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     '''following line makes testing easier for the colors and game over:
     comment out the numbers list filled with zeros and use the following numbers variable instead.'''
     # numbers = [[0, 2, 4, 8], [16, 32, 64, 128], [256, 512, 1024, 2048], [0, 0, 0, 0]]
 
+    score = 0
     action = 1  # action variable tracks if valid action was made after a new number was added
     printing()
     add_new_number(2)
@@ -313,6 +334,16 @@ def printing():
             color = colors(numbers[y][x])
             win.addstr(1 + y * 2, 1 + x * 5, "     ")
             win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color) | curses.A_DIM)
+
+
+def nested_sum(numbers):
+    total = 0
+    for i in numbers:
+        if isinstance(i, list):
+            total += nested_sum(i)
+        else:
+            total += i
+    return total
 
 
 def monitoring():
