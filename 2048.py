@@ -238,13 +238,14 @@ def key_down_pressed():  # what happens when the given key is pressed
     add_new_number()
 
 
-def add_new_number(double=False):
+def add_new_number():
     global numbers
     global action
     global highest
     global invalid_move
     global color
     global autoplayer
+    global double
     two_or_four = random.randrange(10)
     y = random.randrange(4)  # These two generate a random coordinate for the new numeber to be added.
     x = random.randrange(4)
@@ -289,6 +290,7 @@ def restart(re=False):
     global flashing
     global autoplayer
     global score
+    global double
     numbers = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     '''following line makes testing easier for the colors and game over:
     comment out the numbers list filled with zeros and use the following numbers variable instead.'''
@@ -296,9 +298,10 @@ def restart(re=False):
     score = 0
     action = 1  # action variable tracks if valid action was made after a new number was added
     printing()
-    add_new_number(2)
+    double = True
+    add_new_number()
     action = 1
-    add_new_number(2)
+    add_new_number()
     if not re:
         color = 0
         win.addstr(8, 1, "                    ", curses.A_UNDERLINE)
@@ -326,13 +329,13 @@ def restart(re=False):
             if ch == 110:
                 autoplayer = False
                 break
+    double = False
     win.addstr(9, 1, "                    ")
     win.addstr(10, 1, "                    ")
     win.addstr(11, 1, "reset=r     exit=esc", curses.A_DIM)
     win.addstr(11, 7, "r", curses.A_BOLD)
     win.addstr(11, 18, "esc", curses.A_BOLD)
     score_added(0)
-
     if re:
         return
     else:
