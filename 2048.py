@@ -1,6 +1,7 @@
 import random
 import math
 import curses
+from time import sleep
 from curses import KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN
 screen = curses.initscr()
 curses.start_color()
@@ -17,11 +18,9 @@ curses.init_pair(9, 125, -1)  # color code for number 512
 curses.init_pair(10, 126, -1)  # color code for number 1024
 curses.init_pair(11, 90, -1)  # color code for number 2048
 curses.init_pair(12, curses.COLOR_WHITE, -1)  # color code for number 0
-
 curses.noecho()
 curses.curs_set(0)
 win = curses.newwin(13, 22, 0, 0)
-
 win.keypad(1)
 win.border(0)
 win.nodelay(1)
@@ -209,6 +208,7 @@ def key_left_pressed():  # what happens when the given key is pressed
         add_left(x)
         move_left(x)
     add_new_number()
+    action = 0
 
 
 def key_right_pressed():  # what happens when the given key is pressed
@@ -244,6 +244,7 @@ def add_new_number(double=False):
     global highest
     global invalid_move
     global color
+    global autoplayer
     two_or_four = random.randrange(10)
     y = random.randrange(4)  # These two generate a random coordinate for the new numeber to be added.
     x = random.randrange(4)
@@ -270,10 +271,11 @@ def add_new_number(double=False):
         win.refresh()
     else:
         action = 2
-        if action == 2:
-            win.addstr(9, 1, "Try other direction ")
+        if action == 2 and invalid_move < 4:
+            if not autoplayer:
+                win.addstr(9, 1, "Try other direction ")
             win.refresh()
-            if flashing == 1:
+            if flashing:
                 curses.flash()
 
 
@@ -288,13 +290,12 @@ def restart(re=False):
     global numbers
     global action
     global flashing
+    global autoplayer
     global score
-
     numbers = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     '''following line makes testing easier for the colors and game over:
     comment out the numbers list filled with zeros and use the following numbers variable instead.'''
     # numbers = [[0, 2, 4, 8], [16, 32, 64, 128], [256, 512, 1024, 1024], [0, 0, 0, 1024]]
-
     score = 0
     action = 1  # action variable tracks if valid action was made after a new number was added
     printing()
@@ -312,10 +313,23 @@ def restart(re=False):
         while ch != 121 or 110:
             ch = win.getch()
             if ch == 121:
-                flashing = 0
+                flashing = False
                 break
             if ch == 110:
-                flashing = 1
+                flashing = True
+                break
+        win.addstr(9, 1, "   Do you want to   ")
+        win.addstr(10, 1, "  enable autoplay?  ")
+        win.addstr(11, 1, "       (y/n)        ")
+        win.refresh()
+        ch = win.getch()
+        while ch != 121 or 110:
+            ch = win.getch()
+            if ch == 121:
+                autoplayer = True
+                break
+            if ch == 110:
+                autoplayer = False
                 break
     win.addstr(9, 1, "                    ")
     win.addstr(10, 1, "                    ")
@@ -346,8 +360,13 @@ def printing():
 def monitoring():
     global numbers
     global invalid_move
+    global autoplayer
     while True:
         ch = win.getch()
+        if autoplayer:
+            autoplay()
+        else:
+            autoplayer = False
 
         for y in range(4):
             for x in range(4):
@@ -355,22 +374,6 @@ def monitoring():
                     invalid_move = 5
                     victory = True
                     game_over(invalid_move)
-
-        if ch == curses.KEY_LEFT:
-            if invalid_move < 4:
-                key_left_pressed()
-
-        if ch == curses.KEY_RIGHT:
-            if invalid_move < 4:
-                key_right_pressed()
-
-        if ch == curses.KEY_UP:
-            if invalid_move < 4:
-                key_up_pressed()
-
-        if ch == curses.KEY_DOWN:
-            if invalid_move < 4:
-                key_down_pressed()
 
         if invalid_move == 4:
             victory = False
@@ -392,13 +395,44 @@ def monitoring():
                     win.refresh()
                     break
 
+        if not autoplayer:
+            if ch == curses.KEY_LEFT:
+                if invalid_move < 4:
+                    key_left_pressed()
+
+            if ch == curses.KEY_RIGHT:
+                if invalid_move < 4:
+                    key_right_pressed()
+
+            if ch == curses.KEY_UP:
+                if invalid_move < 4:
+                    key_up_pressed()
+
+            if ch == curses.KEY_DOWN:
+                if invalid_move < 4:
+                    key_down_pressed()
+
 
 def game_over(outcome):
-    if outcome == 4:
-        win.addstr(9, 1, "     Game  Over     ", curses.A_BOLD)
-    else:
+    if outcome == 5:
         win.addstr(9, 1, "  Congratulations!  ", curses.A_BOLD)
+    else:
+        win.addstr(9, 1, "     Game  Over     ", curses.A_BOLD)
     win.refresh()
+
+
+def autoplay():
+    next_move = random.randrange(5)
+    if next_move == 1:
+        key_left_pressed()
+    if next_move == 2:
+        key_right_pressed()
+    if next_move == 3:
+        key_up_pressed()
+    if next_move == 4:
+        key_down_pressed()
+    sleep(0.2)
+
 
 restart()
 curses.endwin()
