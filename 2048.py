@@ -198,8 +198,8 @@ def add_down(y):
 def score_added(score_to_add):
     global score
     score = score + score_to_add
-    win.addstr(10, 1, "Score:")
-    win.addstr(10, 8, str(score))
+    text = "Score: " + str(score)
+    win.addstr(10, 1, int((20-len(text))/2)*" " + text)
 
 
 def key_left_pressed():  # what happens when the given key is pressed
@@ -256,7 +256,7 @@ def add_new_number(double=False):
         else:
             numbers[y][x] = 4  # with a 10% chance of adding a 4
             color = colors(numbers[y][x])
-        win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color) | curses.A_BOLD)
+        win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color) | curses.A_BOLD | curses.A_UNDERLINE)
         action = 0
         invalid_move = 0
         highest = max(numbers)
@@ -321,6 +321,7 @@ def restart(re=False):
     win.addstr(11, 1, "reset=r     exit=esc", curses.A_DIM)
     win.addstr(11, 7, "r", curses.A_BOLD)
     win.addstr(11, 18, "esc", curses.A_BOLD)
+    score_added(0)
     win.refresh()
     if re:
         return
@@ -333,17 +334,10 @@ def printing():
         for x in range(4):
             color = colors(numbers[y][x])
             win.addstr(1 + y * 2, 1 + x * 5, "     ")
-            win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color) | curses.A_DIM)
-
-
-def nested_sum(numbers):
-    total = 0
-    for i in numbers:
-        if isinstance(i, list):
-            total += nested_sum(i)
-        else:
-            total += i
-    return total
+            if numbers[y][x] != 0:
+                win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color))
+            else:
+                win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color) | curses.A_DIM)
 
 
 def monitoring():
