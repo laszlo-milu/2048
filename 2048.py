@@ -334,13 +334,13 @@ def printing():
     for y in range(4):
         for x in range(4):
             color = colors(numbers[y][x])
+            attributes = curses.color_pair(color)
             win.addstr(1 + y * 2, 1 + x * 5, "     ")
             if numbers[y][x] == 0:
-                win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color) | curses.A_DIM)
+                attributes = curses.color_pair(color) | curses.A_DIM
             elif numbers[y][x] > 2048:
-                win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(12))
-            else:
-                win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color))
+                attributes = curses.color_pair(12)
+            win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), attributes)
 
 
 def monitoring():
