@@ -256,7 +256,8 @@ def add_new_number(double=False):
         else:
             numbers[y][x] = 4  # with a 10% chance of adding a 4
             color = colors(numbers[y][x])
-        win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color) | curses.A_BOLD | curses.A_UNDERLINE)
+        attributes = curses.color_pair(color) | curses.A_BOLD | curses.A_UNDERLINE
+        win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), attributes)
         action = 0
         invalid_move = 0
         highest = max(numbers)
@@ -292,7 +293,7 @@ def restart(re=False):
     numbers = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     '''following line makes testing easier for the colors and game over:
     comment out the numbers list filled with zeros and use the following numbers variable instead.'''
-    # numbers = [[0, 2, 4, 8], [16, 32, 64, 128], [256, 512, 1024, 2048], [0, 0, 0, 0]]
+    # numbers = [[0, 2, 4, 8], [16, 32, 64, 128], [256, 512, 1024, 1024], [0, 0, 0, 1024]]
 
     score = 0
     action = 1  # action variable tracks if valid action was made after a new number was added
@@ -334,10 +335,12 @@ def printing():
         for x in range(4):
             color = colors(numbers[y][x])
             win.addstr(1 + y * 2, 1 + x * 5, "     ")
-            if numbers[y][x] != 0:
-                win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color))
-            else:
+            if numbers[y][x] == 0:
                 win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color) | curses.A_DIM)
+            elif numbers[y][x] > 2048:
+                win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(12))
+            else:
+                win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), curses.color_pair(color))
 
 
 def monitoring():
