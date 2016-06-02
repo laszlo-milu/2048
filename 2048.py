@@ -344,27 +344,39 @@ def printing():
 
 
 def monitoring():
+    global numbers
+    global invalid_move
     while True:
         ch = win.getch()
 
+        for y in range(4):
+            for x in range(4):
+                if numbers[y][x] == 2048:
+                    invalid_move = 5
+                    victory = True
+                    game_over(invalid_move)
+
         if ch == curses.KEY_LEFT:
-            key_left_pressed()
+            if invalid_move < 4:
+                key_left_pressed()
 
         if ch == curses.KEY_RIGHT:
-            key_right_pressed()
+            if invalid_move < 4:
+                key_right_pressed()
 
         if ch == curses.KEY_UP:
-            key_up_pressed()
+            if invalid_move < 4:
+                key_up_pressed()
 
         if ch == curses.KEY_DOWN:
-            key_down_pressed()
+            if invalid_move < 4:
+                key_down_pressed()
 
         if invalid_move == 4:
-            win.addstr(9, 1, "     Game  Over     ", curses.A_BOLD)
-            win.refresh()
+            victory = False
+            game_over(invalid_move)
 
         if ch == 27:
-            exit = 1
             break
 
         if ch == 114:
@@ -379,6 +391,14 @@ def monitoring():
                     win.addstr(9, 1, "                    ")
                     win.refresh()
                     break
+
+
+def game_over(outcome):
+    if outcome == 4:
+        win.addstr(9, 1, "     Game  Over     ", curses.A_BOLD)
+    else:
+        win.addstr(9, 1, "  Congratulations!  ", curses.A_BOLD)
+    win.refresh()
 
 restart()
 curses.endwin()
