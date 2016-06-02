@@ -418,16 +418,28 @@ def game_over(outcome):
 
 
 def autoplay():
-    next_move = random.randrange(5)
-    if next_move == 1:
-        key_left_pressed()
-    if next_move == 2:
-        key_right_pressed()
-    if next_move == 3:
-        key_up_pressed()
-    if next_move == 4:
-        key_down_pressed()
+    global invalid_move
+    # next_move = random.randrange(5)
+    # if next_move == 1:
+    #     key_left_pressed()
+    # if next_move == 2:
+    #     key_right_pressed()
+    # if next_move == 3:
+    #     key_up_pressed()
+    # if next_move == 4:
+    #     key_down_pressed()
+    # sleep(0.2)
+    # *************************************
+    key_left_pressed()
     sleep(0.2)
+    if invalid_move < 2:
+        key_up_pressed()
+        # sleep(0.1)
+        if invalid_move < 3:
+            key_right_pressed()
+            # sleep(0.1)
+            if invalid_move < 4:
+                key_down_pressed()
 
 
 restart()
