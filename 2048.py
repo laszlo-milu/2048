@@ -263,18 +263,15 @@ def add_new_number(double=False):
         invalid_move = 0
         highest = max(numbers)
         win.addstr(9, 1, "                    ")
-        win.refresh()
 
     elif action == 1:
         add_new_number()
         win.addstr(9, 1, "                    ")
-        win.refresh()
     else:
         action = 2
         if action == 2 and invalid_move < 4:
             if not autoplayer:
                 win.addstr(9, 1, "Try other direction ")
-            win.refresh()
             if flashing:
                 curses.flash()
 
@@ -308,7 +305,6 @@ def restart(re=False):
         win.addstr(9, 1, "Are you sensitive to")
         win.addstr(10, 1, "  flashing lights?  ")
         win.addstr(11, 1, "       (y/n)        ")
-        win.refresh()
         ch = win.getch()
         while ch != 121 or 110:
             ch = win.getch()
@@ -321,7 +317,6 @@ def restart(re=False):
         win.addstr(9, 1, "   Do you want to   ")
         win.addstr(10, 1, "  enable autoplay?  ")
         win.addstr(11, 1, "       (y/n)        ")
-        win.refresh()
         ch = win.getch()
         while ch != 121 or 110:
             ch = win.getch()
@@ -337,7 +332,7 @@ def restart(re=False):
     win.addstr(11, 7, "r", curses.A_BOLD)
     win.addstr(11, 18, "esc", curses.A_BOLD)
     score_added(0)
-    win.refresh()
+
     if re:
         return
     else:
@@ -384,7 +379,6 @@ def monitoring():
 
         if ch == 114:
             win.addstr(9, 1, "Are you sure? (y/n) ")
-            win.refresh()
             while ch != 121 or 110:
                 ch = win.getch()
                 if ch == 121:
@@ -392,8 +386,8 @@ def monitoring():
                     break
                 if ch == 110:
                     win.addstr(9, 1, "                    ")
-                    win.refresh()
                     break
+        win.refresh()
 
         if not autoplayer:
             if ch == curses.KEY_LEFT:
@@ -418,7 +412,6 @@ def game_over(outcome):
         win.addstr(9, 1, "  Congratulations!  ", curses.A_BOLD)
     else:
         win.addstr(9, 1, "     Game  Over     ", curses.A_BOLD)
-    win.refresh()
 
 
 def autoplay():
