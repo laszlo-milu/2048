@@ -431,7 +431,6 @@ def autoplay():
     # sleep(0.2)
     # *************************************
     key_left_pressed()
-    sleep(0.2)
     if invalid_move < 2:
         key_up_pressed()
         # sleep(0.1)
@@ -440,6 +439,7 @@ def autoplay():
             # sleep(0.1)
             if invalid_move < 4:
                 key_down_pressed()
+    sleep(0.2)
 
 
 restart()
