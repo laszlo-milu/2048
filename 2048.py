@@ -29,7 +29,7 @@ win.nodelay(1)
 def move_left(x):  # modified bubble sorting algorithm that moves all the zeros to the right place
     global numbers
     global action
-    global invalid_move
+    global invalid_move_left
     exchanges = True
     passnum = len(numbers) - 1
     while passnum > 0 and exchanges:
@@ -41,17 +41,14 @@ def move_left(x):  # modified bubble sorting algorithm that moves all the zeros 
                 numbers[x][i] = numbers[x][i + 1]
                 numbers[x][i + 1] = temp
                 action = 1
-                invalid_move = 0
-            else:
-                if invalid_move == 0:
-                    invalid_move = invalid_move + 1
+                invalid_move_left = False
         passnum = passnum - 1
 
 
 def move_up(y):  # modified bubble sorting algorithm that moves all the zeros to the right place
     global numbers
     global action
-    global invalid_move
+    global invalid_move_up
     exchanges = True
     passnum = len(numbers) - 1
     while passnum > 0 and exchanges:
@@ -63,17 +60,14 @@ def move_up(y):  # modified bubble sorting algorithm that moves all the zeros to
                 numbers[i][y] = numbers[i + 1][y]
                 numbers[i + 1][y] = temp
                 action = 1
-                invalid_move = 0
-            else:
-                if invalid_move == 1:
-                    invalid_move = invalid_move + 1
+                invalid_move_up = False
         passnum = passnum - 1
 
 
 def move_right(x):  # modified bubble sorting algorithm that moves all the zeros to the right place
     global numbers
     global action
-    global invalid_move
+    global invalid_move_right
     exchanges = True
     passnum = len(numbers) - 1
     while passnum > 0 and exchanges:
@@ -85,17 +79,14 @@ def move_right(x):  # modified bubble sorting algorithm that moves all the zeros
                 numbers[x][i] = numbers[x][i + 1]
                 numbers[x][i + 1] = temp
                 action = 1
-                invalid_move = 0
-            else:
-                if invalid_move == 2:
-                    invalid_move = invalid_move + 1
+                invalid_move_right = False
         passnum = passnum - 1
 
 
 def move_down(y):  # modified bubble sorting algorithm that moves all the zeros to the right place
     global numbers
     global action
-    global invalid_move
+    global invalid_move_down
     exchanges = True
     passnum = len(numbers) - 1
     while passnum > 0 and exchanges:
@@ -107,10 +98,7 @@ def move_down(y):  # modified bubble sorting algorithm that moves all the zeros 
                 numbers[i][y] = numbers[i + 1][y]
                 numbers[i + 1][y] = temp
                 action = 1
-                invalid_move = 0
-            else:
-                if invalid_move == 3:
-                    invalid_move = invalid_move + 1
+                invalid_move_down = False
         passnum = passnum - 1
 
 
@@ -119,7 +107,7 @@ def add_left(x):
     this function multiplies one of them by 2 and makes the other number a zero.'''
     global numbers
     global action
-    global invalid_move
+    global invalid_move_left
     score_to_add = 0
     for i in range(3):
         if numbers[x][i] == numbers[x][i + 1] and numbers[x][i] != 0:
@@ -128,10 +116,7 @@ def add_left(x):
             score_to_add = score_to_add + numbers[x][i]
             score_added(score_to_add)
             action = 1
-            invalid_move = 0
-        else:
-            if invalid_move == 0:
-                invalid_move = invalid_move + 1
+            invalid_move_left = False
 
 
 def add_up(y):
@@ -139,7 +124,7 @@ def add_up(y):
     this function multiplies one of them by 2 and makes the other number a zero.'''
     global numbers
     global action
-    global invalid_move
+    global invalid_move_up
     score_to_add = 0
     for i in range(3):
         if numbers[i][y] == numbers[i + 1][y] and numbers[i][y] != 0:
@@ -148,10 +133,7 @@ def add_up(y):
             score_to_add = score_to_add + numbers[i][y]
             score_added(score_to_add)
             action = 1
-            invalid_move = 0
-        else:
-            if invalid_move == 1:
-                invalid_move = invalid_move + 1
+            invalid_move_up = False
 
 
 def add_right(x):
@@ -159,7 +141,7 @@ def add_right(x):
     this function multiplies one of them by 2 and makes the other number a zero.'''
     global numbers
     global action
-    global invalid_move
+    global invalid_move_right
     score_to_add = 0
     for i in reversed(range(3)):
         if numbers[x][i] == numbers[x][i + 1] and numbers[x][i + 1] != 0:
@@ -168,10 +150,7 @@ def add_right(x):
             score_to_add = score_to_add + numbers[x][i + 1]
             score_added(score_to_add)
             action = 1
-            invalid_move = 0
-        else:
-            if invalid_move == 2:
-                invalid_move = invalid_move + 1
+            invalid_move_right = False
 
 
 def add_down(y):
@@ -179,7 +158,7 @@ def add_down(y):
     this function multiplies one of them by 2 and makes the other number a zero.'''
     global numbers
     global action
-    global invalid_move
+    global invalid_move_down
     score_to_add = 0
     for i in reversed(range(3)):
         if numbers[i][y] == numbers[i + 1][y] and numbers[i][y] != 0:
@@ -188,10 +167,7 @@ def add_down(y):
             score_to_add = score_to_add + numbers[i + 1][y]
             score_added(score_to_add)
             action = 1
-            invalid_move = 0
-        else:
-            if invalid_move == 3:
-                invalid_move = invalid_move + 1
+            invalid_move_down = False
 
 
 def score_added(score_to_add):
@@ -203,39 +179,70 @@ def score_added(score_to_add):
 
 def key_left_pressed():  # what happens when the given key is pressed
     global action
+    global invalid_move_left
+    global invalid_move
+    invalid_move_left = True
     for x in range(4):
         move_left(x)
         add_left(x)
         move_left(x)
     add_new_number()
+    if not invalid_move_left or not invalid_move_right or not invalid_move_down or not invalid_move_up:
+        invalid_move = False
+    else:
+        invalid_move = True
     action = 0
 
 
 def key_right_pressed():  # what happens when the given key is pressed
     global action
+    global invalid_move_right
+    global invalid_move
+    invalid_move_right = True
     for x in range(4):
         move_right(x)
         add_right(x)
         move_right(x)
     add_new_number()
+    if not invalid_move_left or not invalid_move_right or not invalid_move_down or not invalid_move_up:
+        invalid_move = False
+    else:
+        invalid_move = True
+    action = 0
 
 
 def key_up_pressed():  # what happens when the given key is pressed
     global action
+    global invalid_move_up
+    global invalid_move
+    invalid_move_up = True
     for y in range(4):
         move_up(y)
         add_up(y)
         move_up(y)
     add_new_number()
+    if not invalid_move_left or not invalid_move_right or not invalid_move_down or not invalid_move_up:
+        invalid_move = False
+    else:
+        invalid_move = True
+    action = 0
 
 
 def key_down_pressed():  # what happens when the given key is pressed
     global action
+    global invalid_move_down
+    global invalid_move
+    invalid_move_down = True
     for y in range(4):
         move_down(y)
         add_down(y)
         move_down(y)
     add_new_number()
+    if not invalid_move_left or not invalid_move_right or not invalid_move_down or not invalid_move_up:
+        invalid_move = False
+    else:
+        invalid_move = True
+    action = 0
 
 
 def add_new_number():
@@ -261,7 +268,7 @@ def add_new_number():
         attributes = curses.color_pair(color) | curses.A_BOLD | curses.A_UNDERLINE
         win.addstr(1 + y * 2, 1 + x * 5, str(numbers[y][x]), attributes)
         action = 0
-        invalid_move = 0
+        reset_invalid()
         highest = max(numbers)
         win.addstr(9, 1, "                    ")
 
@@ -270,7 +277,7 @@ def add_new_number():
         win.addstr(9, 1, "                    ")
     else:
         action = 2
-        if action == 2 and invalid_move < 4:
+        if action == 2 and invalid_move_left or invalid_move_right or invalid_move_down or invalid_move_up:
             if not autoplayer:
                 win.addstr(9, 1, "Try other direction ")
             if flashing:
@@ -284,13 +291,28 @@ def colors(num):
         return int(math.log2(num))
 
 
+def reset_invalid():
+    global invalid_move_down
+    global invalid_move_right
+    global invalid_move_up
+    global invalid_move_left
+    invalid_move_right = False
+    invalid_move_down = False
+    invalid_move_left = False
+    invalid_move_up = False
+
+
 def restart(re=False):
     global numbers
     global action
     global flashing
     global autoplayer
+    global delay
     global score
     global double
+    global invalid_move
+    reset_invalid()
+    invalid_move = False
     numbers = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     '''following line makes testing easier for the colors and game over:
     comment out the numbers list filled with zeros and use the following numbers variable instead.'''
@@ -304,19 +326,8 @@ def restart(re=False):
     add_new_number()
     if not re:
         color = 0
+        flashing = True
         win.addstr(8, 1, "                    ", curses.A_UNDERLINE)
-        win.addstr(9, 1, "Are you sensitive to")
-        win.addstr(10, 1, "  flashing lights?  ")
-        win.addstr(11, 1, "       (y/n)        ")
-        ch = win.getch()
-        while ch != 121 or 110:
-            ch = win.getch()
-            if ch == 121:
-                flashing = False
-                break
-            if ch == 110:
-                flashing = True
-                break
         win.addstr(9, 1, "   Do you want to   ")
         win.addstr(10, 1, "  enable autoplay?  ")
         win.addstr(11, 1, "       (y/n)        ")
@@ -324,11 +335,39 @@ def restart(re=False):
         while ch != 121 or 110:
             ch = win.getch()
             if ch == 121:
+                flashing = False
                 autoplayer = True
+                win.addstr(9, 1, " Instant  autoplay? ")
+                win.addstr(10, 1, "       (y/n)        ")
+                win.addstr(11, 1, "                    ")
+                ch = win.getch()
+                while ch != 121 or 110:
+                    ch = win.getch()
+                    if ch == 121:
+                        delay = 0
+                        break
+                    if ch == 110:
+                        delay = 0.5
+                        break
                 break
+
             if ch == 110:
                 autoplayer = False
                 break
+        if flashing:
+            win.addstr(9, 1, "Are you sensitive to")
+            win.addstr(10, 1, "  flashing lights?  ")
+            win.addstr(11, 1, "       (y/n)        ")
+            ch = win.getch()
+            while ch != 121 or 110:
+                ch = win.getch()
+                if ch == 121:
+                    flashing = False
+                    break
+                if ch == 110:
+                    flashing = True
+                    break
+
     double = False
     win.addstr(9, 1, "                    ")
     win.addstr(10, 1, "                    ")
@@ -359,23 +398,27 @@ def monitoring():
     global numbers
     global invalid_move
     global autoplayer
+    global delay
     while True:
         ch = win.getch()
-        if autoplayer:
+        if autoplayer and not invalid_move:
+            win.addstr(11, 9, "   ")
+            win.addstr(10, 1, "  ")
+            win.addstr(9, 9, "   ")
+            win.addstr(10, 19, "  ")
             autoplay()
-        else:
-            autoplayer = False
+            sleep(delay)
 
         for y in range(4):
             for x in range(4):
                 if numbers[y][x] == 2048:
-                    invalid_move = 5
+                    invalid_move = True
                     victory = True
-                    game_over(invalid_move)
+                    game_over(victory)
 
-        if invalid_move == 4:
+        if invalid_move:
             victory = False
-            game_over(invalid_move)
+            game_over(victory)
 
         if ch == 27:
             break
@@ -393,32 +436,38 @@ def monitoring():
         win.refresh()
 
         if not autoplayer:
-            if ch == curses.KEY_LEFT:
-                if invalid_move < 4:
-                    key_left_pressed()
-
-            if ch == curses.KEY_RIGHT:
-                if invalid_move < 4:
-                    key_right_pressed()
-
-            if ch == curses.KEY_UP:
-                if invalid_move < 4:
-                    key_up_pressed()
-
-            if ch == curses.KEY_DOWN:
-                if invalid_move < 4:
-                    key_down_pressed()
+            if not invalid_move:
+                if ch == curses.KEY_LEFT:
+                        key_left_pressed()
+                if ch == curses.KEY_RIGHT:
+                        key_right_pressed()
+                if ch == curses.KEY_UP:
+                        key_up_pressed()
+                if ch == curses.KEY_DOWN:
+                        key_down_pressed()
 
 
-def game_over(outcome):
-    if outcome == 5:
+def game_over(victory=False):
+    global invalid_move_up
+    global invalid_move_left
+    global invalid_move_down
+    global invalid_move_right
+    win.addstr(11, 9, "   ")
+    win.addstr(10, 1, "   ")
+    win.addstr(9, 9, "   ")
+    win.addstr(10, 19, "  ")
+    if victory and not invalid_move_left or not invalid_move_right or not invalid_move_down or not invalid_move_up:
         win.addstr(9, 1, "  Congratulations!  ", curses.A_BOLD)
     else:
         win.addstr(9, 1, "     Game  Over     ", curses.A_BOLD)
+    win.refresh()
 
 
 def autoplay():
-    global invalid_move
+    global invalid_move_up
+    global invalid_move_left
+    global invalid_move_down
+    global invalid_move_right
     # next_move = random.randrange(5)
     # if next_move == 1:
     #     key_left_pressed()
@@ -431,16 +480,19 @@ def autoplay():
     # sleep(0.2)
     # *************************************
     key_left_pressed()
-    if invalid_move < 2:
-        key_up_pressed()
-        # sleep(0.1)
-        if invalid_move < 3:
+    win.addstr(10, 1, "<")
+    if invalid_move_left:
+        key_down_pressed()
+        win.addstr(10, 1, "  ")
+        win.addstr(11, 11, "v")
+        if invalid_move_down:
             key_right_pressed()
-            # sleep(0.1)
-            if invalid_move < 4:
-                key_down_pressed()
-    sleep(0.2)
-
+            win.addstr(11, 10, "   ")
+            win.addstr(10, 20, ">")
+            if invalid_move_right:
+                key_up_pressed()
+                win.addstr(10, 19, "  ")
+                win.addstr(9, 11, "∧")
 
 restart()
 curses.endwin()
